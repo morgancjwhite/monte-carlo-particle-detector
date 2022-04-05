@@ -49,11 +49,13 @@ class Task1:
         self.theta_array = np.linspace(0, np.pi)  # x axis
 
     def run(self):
+        print('Task 1.1: Inverse sampling is now running')
         self.inverse_sampling()
+
+        print('\nTask 1.2: Reject sampling is now running')
         self.rejection_sampling()
 
     def inverse_sampling(self):
-        print('Task 1.1: Inverse sampling is now running')
         t1 = time.perf_counter()
 
         # Generate n many random nums between 0-2 (range of q_inv given range 0 < x < pi for p_prime)
@@ -66,7 +68,6 @@ class Task1:
         plt.show()
 
     def rejection_sampling(self):
-        print('\nTask 1.2: Reject sampling is now running')
 
         t1 = time.perf_counter()
         # Obtain rejected and accepted points
