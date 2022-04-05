@@ -49,11 +49,13 @@ class Task1:
         self.theta_array = np.linspace(0, np.pi)  # x axis
 
     def run(self):
+        print('Task 1.1: Inverse sampling is now running')
         self.inverse_sampling()
+
+        print('\nTask 1.2: Reject sampling is now running')
         self.rejection_sampling()
 
     def inverse_sampling(self):
-        print('Task 1.1: Inverse sampling is now running')
         t1 = time.perf_counter()
 
         # Generate n many random nums between 0-2 (range of q_inv given range 0 < x < pi for p_prime)
@@ -66,8 +68,6 @@ class Task1:
         plt.show()
 
     def rejection_sampling(self):
-        print('\nTask 1.2: Reject sampling is now running')
-
         t1 = time.perf_counter()
         # Obtain rejected and accepted points
         points = self._gen_and_class_points(0, np.pi)
@@ -85,32 +85,17 @@ class Task1:
         print(f"The error between the predicted and observed curves is {error}")
         plt.show()
 
-    def _rejected(self, a, b):  #
-        if b <= p_prime(a):  # If y value outside of sine curve for respective x
-            return True  # If accepted, output True
-        else:
-            return False
-
     def _gen_and_class_points(self, mn: float, mx: float) -> ClassedPoints:
-        x_pass = np.zeros(0)
-        y_pass = np.zeros(0)
-        x_rej = np.zeros(0)
-        y_rej = np.zeros(0)
         rand_x = gen_numbers(mn, mx, int(self.reject_samples))  # Random number between min and max values
         rand_y = gen_numbers(np.min(p_prime(self.theta_array)), np.max(p_prime(self.theta_array)), self.reject_samples)
 
-        for x, y in zip(rand_x, rand_y):  # Determine if randomly generated points pass or are rejected
-            if self._rejected(x, y):
-                x_pass = np.append(x_pass, x)
-                y_pass = np.append(y_pass, y)
-            else:
-                x_rej = np.append(x_rej, x)
-                y_rej = np.append(y_rej, y)
+        # If y value outside of sine curve for respective x (programmatically rand_x <= p_prime(rand_y))
+        rejected = np.greater_equal(rand_y, p_prime(rand_x))
+        passed = np.logical_not(rejected)
 
-        return ClassedPoints(x_pass, y_pass, x_rej, y_rej)
+        return ClassedPoints(rand_x[passed], rand_y[passed], rand_x[rejected], rand_y[rejected])
 
     def _histogram(self, data: np.array, bin_num: int, n_samples: float, color: str, title: str) -> float:
-
         bin_width = np.pi / bin_num  # For normalising sine plot
         norm = n_samples / 2 * bin_width
 
