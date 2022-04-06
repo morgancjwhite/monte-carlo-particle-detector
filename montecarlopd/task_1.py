@@ -2,7 +2,7 @@
 === Task 1: inverse and reject sampling ===
 """
 
-import time
+from time import perf_counter
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -56,11 +56,11 @@ class Task1:
         self.rejection_sampling()
 
     def inverse_sampling(self):
-        t1 = time.perf_counter()
+        t1 = perf_counter()
 
         # Generate n many random nums between 0-2 (range of q_inv given range 0 < x < pi for p_prime)
         rand_num = gen_numbers(0, 2, self.inverse_samples)
-        print(f"The time taken for {self.inverse_samples} samples was {time.perf_counter() - t1}s")
+        print(f"The time taken for {self.inverse_samples} samples was {perf_counter() - t1}s")
 
         sinified = q_inv(rand_num)
         error = self._histogram(sinified, 60, self.inverse_samples, "mediumseagreen", "Inverse Sampling")
@@ -68,11 +68,11 @@ class Task1:
         plt.show()
 
     def rejection_sampling(self):
-        t1 = time.perf_counter()
+        t1 = perf_counter()
         # Obtain rejected and accepted points
         points = self._gen_and_class_points(0, np.pi)
         area_under_curve = area(0, np.pi, self.reject_samples, points.y_pass)
-        print(f"The time taken for {self.reject_samples} samples was {time.perf_counter() - t1}s")
+        print(f"The time taken for {self.reject_samples} samples was {perf_counter() - t1}s")
 
         self._scatter(points, "cornflowerblue", "orange", "Rejection Sampling")
         plt.show()
