@@ -58,7 +58,7 @@ class Task1:
     def inverse_sampling(self):
         t1 = perf_counter()
 
-        # Generate n many random nums between 0-2 (range of q_inv given range 0 < x < pi for p_prime)
+        # Generate random nums between 0-2 (range of q_inv given range 0 < x < pi for p_prime)
         rand_num = gen_numbers(0, 2, self.inverse_samples)
         print(f"The time taken for {self.inverse_samples} samples was {perf_counter() - t1}s")
 

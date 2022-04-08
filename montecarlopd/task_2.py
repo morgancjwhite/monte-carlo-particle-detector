@@ -1,3 +1,4 @@
+from time import perf_counter
 from typing import List, Tuple
 
 import numpy as np
@@ -37,12 +38,14 @@ class Task2:
         self.particle_decay_mcm()
 
     def particle_decay_mcm(self):
+        t1 = perf_counter()
         phi, theta = self._gen_angles()
         decay_distances = self._decay_distances()
         on_target = self._gen_xy(decay_distances, theta, phi)
 
-        print("jointplot takes a while to load...")
+        print(f"The time taken for {self.particle_samples} samples was {perf_counter() - t1}s")
         hist = self._hist_2d(on_target.x, on_target.y)
+        print("Plotting now, jointplot takes a while to load...")
         self._jointplot(on_target.x, on_target.y)
         print('Here is a 2d histogram and a jointplot for the unsmeared detector')
         plt.show()
@@ -54,19 +57,13 @@ class Task2:
 
     def _gen_angles(self) -> Tuple:
         phi = np.arccos(1 - np.random.uniform(0, 1, self.particle_samples))  # Polar [0, pi/2]
-        theta = np.random.uniform(0, 2*np.pi, self.particle_samples)  # Azimuth [0, 2pi]
+        theta = np.random.uniform(0, 2 * np.pi, self.particle_samples)  # Azimuth [0, 2pi]
         return phi, theta
 
     def _decay_distances(self) -> np.array:
         # Creates array of decay distances using poission dist.
         times = np.random.exponential(self.decay_time, self.particle_samples)  # Decay times, mean is 550 microseconds
         return self.particle_velocity * times
-
-    def _smear(self, x: np.array, y: np.array) -> Tuple:
-        # Smears result with gaussian with standard deviation of resolution
-        x = np.random.normal(x, self.x_res)
-        y = np.random.normal(y, self.y_res)
-        return x, y
 
     def _gen_xy(self, decay_distances: np.array, theta_arr: np.array, phi_arr: np.array) -> OnTarget:
         detector_half_size = self.detector_size / 2
@@ -81,6 +78,12 @@ class Task2:
         x_smear_on_target, y_smear_on_target = get_on_target(x_smear, y_smear, detector_half_size)
 
         return OnTarget(x_on_target, y_on_target, x_smear_on_target, y_smear_on_target)
+
+    def _smear(self, x: np.array, y: np.array) -> Tuple:
+        # Smears result with gaussian with standard deviation of resolution
+        x = np.random.normal(x, self.x_res)
+        y = np.random.normal(y, self.y_res)
+        return x, y
 
     def _hist_2d(self, x: np.array, y: np.array):
         # Plots a 2d histogram of gamma count against x-y position in detector
