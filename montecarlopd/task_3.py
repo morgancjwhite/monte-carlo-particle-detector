@@ -24,55 +24,36 @@ class Task3:
         self.stats_of_mcms()
 
     def stats_of_mcms(self):
-
         t1 = perf_counter()
-        proportion, cross_sec, index = self._vary_cross()  # mn/mx in nb
-        conf_cross = cross_sec[index]
-        confidence_arr = proportion * 100  # Converting to percentage
+        cross_sections, confidences = self._vary_cross_section()
         print(f"The time taken was {perf_counter() - t1}s")
 
-        self._conf_plot(cross_sec, confidence_arr, conf_cross)
+        # Get the 95% confidence cross-section
+        confident_cross_section = cross_sections[(confidences > 95).argmax()]
+        print(f"Cross section of particle X is less than {round(confident_cross_section, 4)}nb to {self.confidence}%")
+        self._conf_plot(cross_sections, confidences, confident_cross_section)
         plt.show()
 
-        print('The cross section of particle X is less than', round(conf_cross, 4),
-              'nb with', self.confidence, '% confidence')
-
-    # Creates quantity pseudos and calculates proportion above 5 total counts
     def _gen_pseudos(self, cross_section):
-        n = 0
-        for i in range(self.number_of_pseudos):
-            luminosity = self._get_luminosity()
-            background = self._background()  # Finding noise and signal counts
-            signal = self._signal(cross_section, luminosity)
-            if background + signal > 5:  # Seeing if above total counts
-                n += 1
-        return n / self.number_of_pseudos
-
-    def _get_luminosity(self):
-        return abs(np.random.normal(self.luminosity_mean, self.luminosity_std))
+        # Creates pseudo experiments and calculate proportion above 5 total counts
+        resulting_output = self._background() + self._signal(cross_section)
+        return sum(resulting_output > 5) / self.number_of_pseudos
 
     def _background(self):
         # Creates background counts from possion dist. of normally distributed mean
-        return np.random.poisson(np.random.normal(self.background_mean, self.background_std))
+        gaussian_background = np.random.normal(self.background_mean, self.background_std, self.number_of_pseudos)
+        return np.random.poisson(gaussian_background)
 
-    def _signal(self, cross_section, luminosity):
-        # Creates particle X signal
-        return np.random.poisson(luminosity * cross_section)  # From integrated L formula
+    def _signal(self, cross_section) -> np.array:
+        # Distribute luminosity then use posisson dist. From integrated L formula
+        luminosity = abs(np.random.normal(self.luminosity_mean, self.luminosity_std, self.number_of_pseudos))
+        return np.random.poisson(luminosity * cross_section)
 
-    # Varies cross section from mn to mx in incr increments
-    def _vary_cross(self):
-        proportion = np.empty(0)
-        cross_sec = np.linspace(self.min_cross_section, self.max_cross_section, self.cross_section_increments)
-        m = 0  # Dummy variable
-        for j in range(self.cross_section_increments):
-            # For each cross section, generate quantity pseudos,
-            # see if proportion of counts is above desired confidence
-            proportion = np.append(proportion, self._gen_pseudos(cross_sec[j], ))
-            # Saves index of first cross_sec to reach desired confidence in array
-            if proportion[j] >= (self.confidence/100) and m == 0:
-                index = j
-                m += 1
-        return [proportion, cross_sec, index]
+    def _vary_cross_section(self):
+        # Generate pseudo experiments for increments of a cross section
+        cross_sec_iter = np.linspace(self.min_cross_section, self.max_cross_section, self.cross_section_increments)
+        confidence_arr = np.array([self._gen_pseudos(cross_sec) for cross_sec in cross_sec_iter])
+        return cross_sec_iter, 100 * confidence_arr
 
     def _conf_plot(self, x, y, conf_cross):
         # Plots confidence interval against cross section and shades confidence area
