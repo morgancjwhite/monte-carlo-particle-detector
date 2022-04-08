@@ -1,9 +1,9 @@
 from montecarlopd.task_1 import Task1
 from montecarlopd.task_2 import Task2
-
-# Task 1
 from montecarlopd.task_3 import Task3
 
+
+# Task 1
 INVERSE_SAMPLES = 1e4
 REJECT_SAMPLES = 1e4
 

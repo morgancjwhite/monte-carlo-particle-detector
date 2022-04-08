@@ -26,7 +26,8 @@ class Task3:
     def stats_of_mcms(self):
         t1 = perf_counter()
         cross_sections, confidences = self._vary_cross_section()
-        print(f"The time taken was {perf_counter() - t1}s")
+        print(f"The time taken for {self.number_of_pseudos} pseudo experiments and {self.cross_section_increments} "
+              f"cross-section increments was {perf_counter() - t1}s")
 
         # Get the 95% confidence cross-section
         confident_cross_section = cross_sections[(confidences > 95).argmax()]

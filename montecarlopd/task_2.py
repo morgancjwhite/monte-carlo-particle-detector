@@ -1,3 +1,4 @@
+from time import perf_counter
 from typing import List, Tuple
 
 import numpy as np
@@ -37,12 +38,14 @@ class Task2:
         self.particle_decay_mcm()
 
     def particle_decay_mcm(self):
+        t1 = perf_counter()
         phi, theta = self._gen_angles()
         decay_distances = self._decay_distances()
         on_target = self._gen_xy(decay_distances, theta, phi)
 
-        print("jointplot takes a while to load...")
+        print(f"The time taken for {self.particle_samples} samples was {perf_counter() - t1}s")
         hist = self._hist_2d(on_target.x, on_target.y)
+        print("Plotting now, jointplot takes a while to load...")
         self._jointplot(on_target.x, on_target.y)
         print('Here is a 2d histogram and a jointplot for the unsmeared detector')
         plt.show()
