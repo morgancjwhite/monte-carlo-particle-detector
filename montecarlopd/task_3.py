@@ -34,6 +34,12 @@ class Task3:
         self._conf_plot(cross_sections, confidences, confident_cross_section)
         plt.show()
 
+    def _vary_cross_section(self):
+        # Generate pseudo experiments for increments of a cross section
+        cross_sec_iter = np.linspace(self.min_cross_section, self.max_cross_section, self.cross_section_increments)
+        confidence_arr = np.array([self._gen_pseudos(cross_sec) for cross_sec in cross_sec_iter])
+        return cross_sec_iter, 100 * confidence_arr
+
     def _gen_pseudos(self, cross_section):
         # Creates pseudo experiments and calculate proportion above 5 total counts
         resulting_output = self._background() + self._signal(cross_section)
@@ -48,12 +54,6 @@ class Task3:
         # Distribute luminosity then use posisson dist. From integrated L formula
         luminosity = abs(np.random.normal(self.luminosity_mean, self.luminosity_std, self.number_of_pseudos))
         return np.random.poisson(luminosity * cross_section)
-
-    def _vary_cross_section(self):
-        # Generate pseudo experiments for increments of a cross section
-        cross_sec_iter = np.linspace(self.min_cross_section, self.max_cross_section, self.cross_section_increments)
-        confidence_arr = np.array([self._gen_pseudos(cross_sec) for cross_sec in cross_sec_iter])
-        return cross_sec_iter, 100 * confidence_arr
 
     def _conf_plot(self, x, y, conf_cross):
         # Plots confidence interval against cross section and shades confidence area

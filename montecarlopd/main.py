@@ -16,20 +16,18 @@ PARTICLE_SAMPLES = 1e5
 PSEUDO_EXPERIMENTS = int(5e3)
 
 
-
-
 if __name__ == '__main__':
     # Task 1
     # Inverse and rejection sampling of a sine curve
-    # task_1 = Task1(INVERSE_SAMPLES, REJECT_SAMPLES)
-    # task_1.run()
-    #
-    # # Task 2
+    task_1 = Task1(INVERSE_SAMPLES, REJECT_SAMPLES)
+    task_1.run()
+
+    # Task 2
     # # Inverse and rejection sampling of a sine curve
-    # task_2 = Task2(PARTICLE_SAMPLES)
-    # task_2.run()
+    task_2 = Task2(PARTICLE_SAMPLES)
+    task_2.run()
 
     # Task 3
-    # Statistical Analysis of Monte Carlo methods
+    # # Statistical Analysis of Monte Carlo methods
     task_3 = Task3(PSEUDO_EXPERIMENTS)
     task_3.run()
