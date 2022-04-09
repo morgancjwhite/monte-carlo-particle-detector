@@ -7,11 +7,11 @@ practical particle physics. Find attached my report.
 
 # Table of Contents
 1. [Task 1](#task1)
-   1. [Task 1.1 -Inverse Sampling](#inverse-sampling-div-idinverse)
-   2. [Task 1.2 - Rejection Sampling](#reject-sampling-div-idreject)
-2. [Task 2 - Particle detection and distribution imaging](#task-2-div-idtask2)
-3. [Task 3 - Statistical analysis with Monte Carlo methods](#fourth-examplehttpwwwfourthexamplecom)
-3. [Set up the repo](#fourth-examplehttpwwwfourthexamplecom)
+   1. [Task 1.1 -Inverse Sampling](#inverse)
+   2. [Task 1.2 - Rejection Sampling](#reject)
+2. [Task 2 - Particle detection and distribution imaging](#task2)
+3. [Task 3 - Statistical analysis with Monte Carlo methods](#task3)
+3. [Set up the repo](#setup)
 ---
 
 ## Task 1 <div id='task1'/>
