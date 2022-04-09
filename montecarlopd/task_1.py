@@ -59,10 +59,10 @@ class Task1:
         t1 = perf_counter()
 
         # Generate random nums between 0-2 (range of q_inv given range 0 < x < pi for p_prime)
-        rand_num = gen_numbers(0, 2, self.inverse_samples)
+        rand_nums = gen_numbers(0, 2, self.inverse_samples)
         print(f"The time taken for {self.inverse_samples} samples was {perf_counter() - t1}s")
 
-        sinified = q_inv(rand_num)
+        sinified = q_inv(rand_nums)
         error = self._histogram(sinified, 60, self.inverse_samples, "mediumseagreen", "Inverse Sampling")
         print(f"The error between the predicted and observed curves is: {error}")
         plt.show()
