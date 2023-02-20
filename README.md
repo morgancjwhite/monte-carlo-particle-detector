@@ -43,7 +43,7 @@ radius and grid size gives us pi!
 
 The code for a quarter circle is here:
 
-```
+```python3
 import numpy.random as r
 # Imagine a quarter circle stretching to the side of a grid where the radius r=1 obeys r^2 = x^2 + y^2
 samples = 10000
